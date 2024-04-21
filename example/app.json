@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "expo-open-with-file-example",
+    "slug": "expo-open-with-file-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "expo.modules.openwithfile.example"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "expo.modules.openwithfile.example"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "../app.plugin.js",
+        {
+          "types": [
+            {
+              "extension": "dlc"
+            }
+          ]
+        }
+      ]
+    ]
+  }
+}
