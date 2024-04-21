@@ -42,14 +42,14 @@ const withOpenWithFile: ConfigPlugin<Props> = (config, { types, custom }) => {
   config = withInfoPlist(config, config => {
     const exportedTypeDeclarations = types.map(type => {
       return {
-        UTTypeConformsTo: type.custom?.ios?.typeConformsTo || [
+        UTTypeConformsTo: type.custom?.ios?.typeConformsTo ?? [
           'public.data',
           'public.item',
         ],
         UTTypeDescription:
-          type.custom?.ios?.typeDescription || type.extension.toUpperCase(),
+          type.custom?.ios?.typeDescription ?? type.extension.toUpperCase(),
         UTTypeIdentifier:
-          type.custom?.ios?.typeIdentifier ||
+          type.custom?.ios?.typeIdentifier ??
           `com.${config.name}.${type.extension}`.toLowerCase(),
         UTTypeTagSpecification: {
           'public.filename-extension': [
@@ -62,8 +62,8 @@ const withOpenWithFile: ConfigPlugin<Props> = (config, { types, custom }) => {
     const documentTypes = types.map(type => {
       return {
         CFBundleTypeName: type.extension.toUpperCase(),
-        CFBundleTypeRole: type.custom?.ios?.bundleTypeRole || 'Editor',
-        LSHandlerRank: type.custom?.ios?.handlerRank || 'Owner',
+        CFBundleTypeRole: type.custom?.ios?.bundleTypeRole ?? 'Editor',
+        LSHandlerRank: type.custom?.ios?.handlerRank ?? 'Owner',
         LSItemContentTypes: [
           `com.${config.name}.${type.extension}`.toLowerCase(),
         ],
@@ -72,9 +72,9 @@ const withOpenWithFile: ConfigPlugin<Props> = (config, { types, custom }) => {
     config.modResults['UTExportedTypeDeclarations'] = exportedTypeDeclarations;
     config.modResults['CFBundleDocumentTypes'] = documentTypes;
     config.modResults['UISupportsDocumentBrowser'] =
-      custom?.ios?.supportsDocumentBrowser || false;
+      custom?.ios?.supportsDocumentBrowser ?? false;
     config.modResults['LSSupportsOpeningDocumentsInPlace'] =
-      custom?.ios?.supportsOpeningDocumentsInPlace || true;
+      custom?.ios?.supportsOpeningDocumentsInPlace ?? false;
     return config;
   });
 
@@ -83,18 +83,18 @@ const withOpenWithFile: ConfigPlugin<Props> = (config, { types, custom }) => {
     const intentFilters = mainActivity['intent-filter'] || [];
 
     const newIntentFilters = types.map(type => {
-      const actions = type.custom?.android?.actions || ['VIEW', 'EDIT'];
-      const categories = type.custom?.android?.categories || [
+      const actions = type.custom?.android?.actions ?? ['VIEW', 'EDIT'];
+      const categories = type.custom?.android?.categories ?? [
         'BROWSABLE',
         'DEFAULT',
       ];
-      const mimeTypes = type.custom?.android?.mimeTypes || [
+      const mimeTypes = type.custom?.android?.mimeTypes ?? [
         `application/${type.extension}`,
         'application/octet-stream',
       ];
-      const schemes = type.custom?.android?.schemes || ['file', 'content'];
-      const hosts = type.custom?.android?.hosts || [];
-      const pathPatterns = type.custom?.android?.pathPatterns || [
+      const schemes = type.custom?.android?.schemes ?? ['file', 'content'];
+      const hosts = type.custom?.android?.hosts ?? [];
+      const pathPatterns = type.custom?.android?.pathPatterns ?? [
         `.*\\\\.${type.extension}`,
         `.*\\\\..*\\\\.${type.extension}`,
         `.*\\\\..*\\\\..*\\\\.${type.extension}`,
