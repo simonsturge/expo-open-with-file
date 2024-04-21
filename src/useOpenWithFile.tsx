@@ -38,7 +38,7 @@ const useOpenWithFile = ({ debug }: OpenWithFileOptions = { debug: false }) => {
 
   useEffect(() => {
     debug && console.log('[expo-open-with-url] url', url);
-    if (!url || !url.startsWith('file://') || url.startsWith('content://')) {
+    if (!url || !url.startsWith('file://') || !url.startsWith('content://')) {
       debug && console.log('[expo-open-with-url] url not supported');
       return;
     }
