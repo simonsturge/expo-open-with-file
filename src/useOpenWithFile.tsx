@@ -1,9 +1,9 @@
 import * as FileSystem from 'expo-file-system';
-import { useURL } from 'expo-linking';
-import { useEffect, useState } from 'react';
 
-import { OpenedFile } from './ExpoOpenWithFile.types';
+import { useEffect, useState } from 'react';
 import { useBetterURL } from './useBetterUrl';
+import { OpenedFile } from './ExpoOpenWithFile.types';
+import { Platform } from 'react-native';
 
 type OpenWithFileOptions = {
   debug?: boolean;
@@ -17,9 +17,9 @@ const useOpenWithFile = ({ debug }: OpenWithFileOptions = { debug: false }) => {
   const readUrl = async (uri: string) => {
     try {
       const info = await FileSystem.getInfoAsync(uri);
-      debug && console.log('[expo-open-with-url] info', JSON.stringify(info));
+      debug && console.log('[expo-open-with-file] info', JSON.stringify(info));
       if (!info.exists || info.isDirectory) {
-        debug && console.log('[expo-open-with-url] not supported');
+        debug && console.log('[expo-open-with-file] not supported');
         return;
       }
       const temp = FileSystem.cacheDirectory + 'temp';
@@ -29,20 +29,29 @@ const useOpenWithFile = ({ debug }: OpenWithFileOptions = { debug: false }) => {
       });
       await FileSystem.deleteAsync(temp);
       const file = { info, base64 };
-      debug && console.log('[expo-open-with-url] file', JSON.stringify(file));
+      debug && console.log('[expo-open-with-file] file', JSON.stringify(file));
       setFile(file);
     } catch (e) {
-      debug && console.log('[expo-open-with-url] not supported', e);
+      debug && console.log('[expo-open-with-file] not supported', e);
     }
   };
 
   useEffect(() => {
-    debug && console.log('[expo-open-with-url] url', url);
-    if (!url || !url.startsWith('file://') || !url.startsWith('content://')) {
-      debug && console.log('[expo-open-with-url] url not supported');
+    debug && console.log('[expo-open-with-file] url', url);
+    if (!url) {
+      debug && console.log('[expo-open-with-file] no url, stop');
       return;
     }
-    readUrl(url);
+    if (Platform.OS === 'android' && url.startsWith('content://')) {
+      debug && console.log('[expo-open-with-file] android, read url');
+      readUrl(url);
+      return;
+    }
+    if (Platform.OS === 'ios' && url.startsWith('file://')) {
+      debug && console.log('[expo-open-with-file] iOS, read url');
+      readUrl(url);
+      return;
+    }
   }, [url]);
 
   return { file };
