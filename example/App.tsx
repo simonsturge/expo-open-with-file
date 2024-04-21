@@ -2,7 +2,7 @@ import { useOpenWithFile } from 'expo-open-with-file';
 import { Text, View } from 'react-native';
 
 export default function App() {
-  const { file } = useOpenWithFile();
+  const { file } = useOpenWithFile({ debug: true });
 
   console.log('FILE', JSON.stringify(file));
 
