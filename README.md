@@ -32,24 +32,24 @@ Add plugin in `app.json`, and run `expo prebuild`
 
 ## Usage
 
-  To access the file, use `useOpenWithFile`. This will give you some file info (if available, like size, uri...) and the contents of the file in `Base64`.
+To access the file, use `useOpenWithFile`. This will give you some file info (if available, like size, uri...) and the contents of the file in `Base64`.
 
 ```typescript
 export  default  function  App() {
-	const { file } =  useOpenWithFile({ resetOnBackground:  true });
+    const { file } =  useOpenWithFile({ resetOnBackground:  true });
 
-	useEffect(() => {
-		if (file) {
-			console.log('Info', JSON.stringify(file.info));
-			console.log('Base64', JSON.stringify(file.base64));
-		}
-	}, [file]);
+    useEffect(() => {
+        if (file) {
+	    console.log('Info', JSON.stringify(file.info));
+	    console.log('Base64', JSON.stringify(file.base64));
+	}
+    }, [file]);
 
-	return (
-		<View  style={{ flex:  1, alignItems:  'center', justifyContent:  'center' }}>
-			<Text>File: {file?.info.uri || 'none'}</Text>
-		</View>
-	);
+    return (
+	<View  style={{ flex:  1, alignItems:  'center', justifyContent:  'center' }}>
+	    <Text>File: {file?.info.uri || 'none'}</Text>
+	</View>
+    );
 }
 ```
 
@@ -72,7 +72,7 @@ You can provide extra properties for iOS to support opening documents in place. 
           "ios": {
 	        "supportsDocumentBrowser": true,
 	        "supportsFileSharingEnabled": true,
-            "supportsOpeningDocumentsInPlace": true,
+            	"supportsOpeningDocumentsInPlace": true,
           }
         }
       }
