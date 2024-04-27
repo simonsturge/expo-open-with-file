@@ -33,6 +33,7 @@ type Props = {
   custom?: {
     ios?: {
       supportsDocumentBrowser?: boolean;
+      supportsFileSharingEnabled?: boolean;
       supportsOpeningDocumentsInPlace?: boolean;
     };
   };
@@ -71,6 +72,8 @@ const withOpenWithFile: ConfigPlugin<Props> = (config, { types, custom }) => {
     });
     config.modResults['UTExportedTypeDeclarations'] = exportedTypeDeclarations;
     config.modResults['CFBundleDocumentTypes'] = documentTypes;
+    config.modResults['UIFileSharingEnabled'] =
+      custom?.ios?.supportsFileSharingEnabled ?? false;
     config.modResults['UISupportsDocumentBrowser'] =
       custom?.ios?.supportsDocumentBrowser ?? false;
     config.modResults['LSSupportsOpeningDocumentsInPlace'] =

@@ -1,3 +1,8 @@
 import { requireNativeModule } from 'expo-modules-core';
 
-export default requireNativeModule('ExpoOpenWithFile');
+const ExpoOpenWithFileModule = requireNativeModule('ExpoOpenWithFile');
+export default ExpoOpenWithFileModule;
+
+export async function readFile(url: string): Promise<string | null> {
+  return ExpoOpenWithFileModule.readFile(url);
+}

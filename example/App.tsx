@@ -1,10 +1,16 @@
 import { useOpenWithFile } from 'expo-open-with-file';
+import { useEffect } from 'react';
 import { Text, View } from 'react-native';
 
 export default function App() {
-  const { file } = useOpenWithFile({ debug: true });
+  const { file } = useOpenWithFile({ resetOnBackground: true });
 
-  console.log('FILE', JSON.stringify(file));
+  useEffect(() => {
+    if (file) {
+      console.log('Info', JSON.stringify(file.info));
+      console.log('Base64', JSON.stringify(file.base64));
+    }
+  }, [file]);
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
