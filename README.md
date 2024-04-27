@@ -70,9 +70,9 @@ You can provide extra properties for iOS to support opening documents in place. 
         ],
         "custom": {
           "ios": {
-	        "supportsDocumentBrowser": true,
-	        "supportsFileSharingEnabled": true,
-            	"supportsOpeningDocumentsInPlace": true,
+	     "supportsDocumentBrowser": true,
+	     "supportsFileSharingEnabled": true,
+  	     "supportsOpeningDocumentsInPlace": true,
           }
         }
       }
