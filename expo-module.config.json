@@ -2,5 +2,8 @@
   "platforms": ["ios", "android"],
   "ios": {
     "modules": ["ExpoOpenWithFileModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.openwithfile.ExpoOpenWithFileModule"]
   }
 }
