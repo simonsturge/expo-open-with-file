@@ -35,11 +35,11 @@
     "expo-modules-core": "^1.11.12"
   },
   "peerDependencies": {
-    "expo": "^50",
+    "expo": "*",
     "react": "*",
+    "react-native": "*",
     "expo-constants": ">=14.4.2",
     "expo-linking": ">=6.2.2",
-    "expo-file-system": ">=16.0.9",
-    "react-native": "*"
+    "expo-file-system": ">=16.0.9"
   }
 }
