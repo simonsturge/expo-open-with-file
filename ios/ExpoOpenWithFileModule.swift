@@ -6,6 +6,7 @@ public class ExpoOpenWithFileModule: Module {
         Name("ExpoOpenWithFile")
         
         Function("readFile", readFile)
+        Function("getFileName", getFileName)
     }
     
     private func readFile(path: String) -> String? {
@@ -19,5 +20,9 @@ public class ExpoOpenWithFileModule: Module {
             url.stopAccessingSecurityScopedResource()
         }
         return contents;
+    }
+
+    private func getFileName(path: String) -> String? {
+        return "";
     }
 }

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AppState, Platform } from 'react-native';
 
 import { OpenedFile } from './ExpoOpenWithFile.types';
-import { readFile } from './ExpoOpenWithFileModule';
+import { readFile, getFileName } from './ExpoOpenWithFileModule';
 import { useBetterURL } from './useBetterUrl';
 
 type OpenWithFileOptions = {
@@ -23,6 +23,17 @@ const useOpenWithFile = (
 
   const appState = useRef(AppState.currentState);
 
+  const getFileNameFromUri = (uri: string) => {
+    try {
+      const decodedUri = decodeURIComponent(uri);
+      const segments = decodedUri.split('/');
+      return segments[segments.length - 1];
+    } catch (e) {
+      console.error('Failed to parse file name from URI:', e);
+      return '';
+    }
+  };
+
   const readUrl = async (uri: string) => {
     try {
       const info = await FileSystem.getInfoAsync(uri);
@@ -35,10 +46,12 @@ const useOpenWithFile = (
             );
           const file = await readFile(uri);
           if (file) {
+            const fileName = getFileNameFromUri(uri);
             debug &&
               console.log(
                 '[expo-open-with-file] file found by native code',
                 JSON.stringify(file),
+                fileName,
               );
             setFile({
               info: {
@@ -48,6 +61,7 @@ const useOpenWithFile = (
                 isDirectory: false,
                 modificationTime: Date.now(),
               },
+              fileName,
               base64: file,
             });
           } else {
@@ -70,7 +84,11 @@ const useOpenWithFile = (
         encoding: FileSystem.EncodingType.Base64,
       });
       await FileSystem.deleteAsync(temp);
-      const file = { info, base64 };
+      const fileName =
+        Platform.OS === 'ios'
+          ? getFileNameFromUri(uri)
+          : await getFileName(uri);
+      const file = { info, base64, fileName };
       debug && console.log('[expo-open-with-file] file', JSON.stringify(file));
       setFile(file);
     } catch (e) {
