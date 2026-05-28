@@ -1,4 +1,5 @@
-import * as FileSystem from 'expo-file-system';
+import { File, Paths } from 'expo-file-system';
+import type { FileInfo } from 'expo-file-system';
 import { useEffect, useRef, useState } from 'react';
 import { AppState, Platform } from 'react-native';
 
@@ -36,33 +37,32 @@ const useOpenWithFile = (
 
   const readUrl = async (uri: string) => {
     try {
-      const info = await FileSystem.getInfoAsync(uri);
-      debug && console.log('[expo-open-with-file] info', JSON.stringify(info));
-      if (!info.exists) {
+      const sourceFile = new File(uri);
+      debug && console.log('[expo-open-with-file] exists', sourceFile.exists);
+      if (!sourceFile.exists) {
         if (Platform.OS === 'ios') {
           debug &&
             console.log(
               '[expo-open-with-file] file could be protected, try native read (this can happen when opening documents in place is enabled)',
             );
-          const file = await readFile(uri);
-          if (file) {
+          const fileData = await readFile(uri);
+          if (fileData) {
             const fileName = getFileNameFromUri(uri);
             debug &&
               console.log(
                 '[expo-open-with-file] file found by native code',
-                JSON.stringify(file),
+                JSON.stringify(fileData),
                 fileName,
               );
             setFile({
               info: {
                 exists: true,
                 uri,
-                size: new Blob([file]).size,
-                isDirectory: false,
+                size: new Blob([fileData]).size,
                 modificationTime: Date.now(),
               },
               fileName,
-              base64: file,
+              base64: fileData,
             });
           } else {
             debug &&
@@ -73,21 +73,20 @@ const useOpenWithFile = (
         }
         return;
       }
-      if (info.isDirectory) {
-        debug &&
-          console.log('[expo-open-with-file] url is directory, not file');
-        return;
-      }
-      const temp = FileSystem.cacheDirectory + 'temp';
-      await FileSystem.copyAsync({ from: uri, to: temp });
-      const base64 = await FileSystem.readAsStringAsync(temp, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-      await FileSystem.deleteAsync(temp);
+      const tempFile = new File(Paths.cache, 'temp');
+      await sourceFile.copy(tempFile, { overwrite: true });
+      const base64 = await tempFile.base64();
+      tempFile.delete();
       const fileName =
         Platform.OS === 'ios'
           ? getFileNameFromUri(uri)
           : await getFileName(uri);
+      const info: FileInfo = {
+        exists: true,
+        uri,
+        size: sourceFile.size,
+        modificationTime: sourceFile.lastModified ?? undefined,
+      };
       const file = { info, base64, fileName };
       debug && console.log('[expo-open-with-file] file', JSON.stringify(file));
       setFile(file);
