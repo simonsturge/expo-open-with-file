@@ -40,6 +40,6 @@
     "react-native": "*",
     "expo-constants": ">=14.4.2",
     "expo-linking": ">=6.2.2",
-    "expo-file-system": ">=16.0.9"
+    "expo-file-system": ">=18.0.0"
   }
 }

@@ -1,7 +1,10 @@
-import { FileInfo } from 'expo-file-system';
-
 export type OpenedFile = {
-  info: FileInfo;
+  info: {
+    exists: boolean;
+    uri?: string;
+    size?: number;
+    modificationTime?: number;
+  };
   fileName: string | null;
   base64: string;
 };

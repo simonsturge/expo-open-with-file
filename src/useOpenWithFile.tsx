@@ -1,5 +1,4 @@
 import { File, Paths } from 'expo-file-system';
-import type { FileInfo } from 'expo-file-system';
 import { useEffect, useRef, useState } from 'react';
 import { AppState, Platform } from 'react-native';
 
@@ -81,7 +80,7 @@ const useOpenWithFile = (
         Platform.OS === 'ios'
           ? getFileNameFromUri(uri)
           : await getFileName(uri);
-      const info: FileInfo = {
+      const info = {
         exists: true,
         uri,
         size: sourceFile.size,
